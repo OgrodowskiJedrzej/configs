@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+echo $BASH_VERSION
+
+# GIT FUNCTIONS
+git_branch() {
+  git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+# TERMINAL PROMPT
+PS1="\[\e[0;92m\]\u\[\e[m\] "
+
+export PROMPT_DIRTRIM=1
+PS1+="\[\e[38;5;129m\]\w\[\e[0m\] "
+
+# Git current branch
+PS1+="\[\e[0;36m\]\$(git_branch)\[\e[m\]"
+
+# Zakończenie prompta
+PS1+=">> "
+
+LANG=c
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+export PATH="/usr/local/bin:$PATH"
+export PATH=$PATH:/opt/homebrew/bin
+export PATH=${PATH}:/usr/local/mysql-8.2.0-macos13-arm64/bin
+export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
