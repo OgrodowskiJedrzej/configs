@@ -1,26 +1,35 @@
 #!/usr/bin/env bash
-echo $BASH_VERSION
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
-# GIT FUNCTIONS
-git_branch() {
-  git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-# TERMINAL PROMPT
-PS1="\[\e[0;92m\]\u\[\e[m\] "
+path_add() { [[ ":$PATH:" != *":$1:"* ]] && export PATH="$1:$PATH"; }
 
-export PROMPT_DIRTRIM=1
-PS1+="\[\e[38;5;129m\]\w\[\e[0m\] "
+path_add "/opt/homebrew/bin"
+path_add "/usr/local/bin"
+path_add "/opt/mssql-tools/bin"
+path_add "/usr/local/mysql-8.2.0-macos13-arm64/bin"
+path_add "$HOME/.local/bin"
 
-# Git current branch
-PS1+="\[\e[0;36m\]\$(git_branch)\[\e[m\]"
+# export PYENV_ROOT="$HOME/.pyenv"
+path_add "$PYENV_ROOT/bin"
+# eval "$(pyenv init -)"
+# Uncomment if you use pyenv virtualenvs:
+# eval "$(pyenv virtualenv-init -)"
 
-# Zakończenie prompta
-PS1+=">> "
+[[ -d "/opt/homebrew/lib" ]] && export DYLD_LIBRARY_PATH="/opt/homebrew/lib:${DYLD_LIBRARY_PATH}"
 
-LANG=c
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
-export PATH="/usr/local/bin:$PATH"
-export PATH=$PATH:/opt/homebrew/bin
-export PATH=${PATH}:/usr/local/mysql-8.2.0-macos13-arm64/bin
-export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
+
+git_branch() {
+    git symbolic-ref --short HEAD 2>/dev/null | sed 's/.*/ (\0)/'
+}
+
+export PROMPT_DIRTRIM=1
+PS1="\[\e[0;92m\]\u\[\e[m\] "
+PS1+="\[\e[38;5;129m\]\w\[\e[0m\] "
+PS1+="\[\e[0;36m\]\$(git_branch)\[\e[m\]"
+PS1+=">> "
+export PS1
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export PATH="/opt/homebrew/bin:$PATH"
