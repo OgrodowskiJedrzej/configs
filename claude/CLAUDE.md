@@ -80,6 +80,8 @@ Do not introduce new dependencies unless there is a clear reason.
 
 Before creating new utilities or abstractions, check whether similar code already exists.
 
+Do not commit anything to github by yourself.
+
 After implementation, summarize:
 * what changed;
 * which files changed;
