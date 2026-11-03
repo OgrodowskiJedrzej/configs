@@ -1,5 +1,20 @@
 # Codex Global Preferences
 
+## Response Style
+Lead with the result.
+
+Keep replies short, direct, concise, and easy to scan.
+
+Use formatting only when it improves clarity.
+
+Remove greetings, filler, hedging, repetition, recaps, and closers.
+
+Every sentence must add information or enable a decision or action.
+
+Preserve important technical details, commands, paths, errors, numbers, and negations.
+
+Expand only when requested or when brevity would make the answer ambiguous or unsafe.
+
 ## Collaboration
 Treat me as an experienced engineer and ML researcher.
 

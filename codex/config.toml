@@ -1,0 +1,33 @@
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+approvals_reviewer = "user"
+
+developer_instructions = """
+Operate in separate proposal and execution phases.
+
+Start repository tasks read-only. A request to fix, implement, add, remove, or
+change something authorizes investigation and a proposal, not repository writes.
+
+Before modifying repository files, present a change contract containing:
+- the objective and relevant evidence;
+- the exact files to modify;
+- the intended change in each file;
+- tests or checks to run;
+- explicit non-goals.
+
+Wait for explicit user approval after presenting the contract. Do not request
+write permission or begin implementation before that approval.
+
+Approval covers only the listed files and behavior. Stop and request new approval
+before touching another file, adding a dependency, changing a public API, schema,
+data format, or experiment behavior, or performing a refactor, rename, cleanup,
+or formatting pass not included in the approved contract.
+
+Do not make opportunistic improvements or rewrite surrounding code for
+consistency. After one approved implementation unit, stop and report the files
+changed, why each changed, verification performed, and any deviation from the
+contract.
+
+Skip this gate only when the user explicitly says to bypass change control for
+the current task.
+"""

@@ -3,22 +3,42 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CODEX_DIR="${1:-${CODEX_HOME:-$HOME/.codex}}"
+PRESERVED_PATHS=0
 
 link_config() {
   local source="$1"
   local target="$2"
 
-  if [ -e "$target" ] && [ ! -L "$target" ]; then
-    echo "Refusing to replace existing path: $target" >&2
-    return 1
+  if [ -L "$target" ]; then
+    if [ "$(readlink "$target")" = "$source" ]; then
+      echo "Already linked $target -> $source"
+      return
+    fi
+
+    ln -sfn "$source" "$target"
+    echo "Relinked $target -> $source"
+    return
   fi
 
-  ln -sfn "$source" "$target"
+  if [ -e "$target" ]; then
+    echo "Preserved existing path: $target" >&2
+    echo "  Merge manually from: $source" >&2
+    PRESERVED_PATHS=$((PRESERVED_PATHS + 1))
+    return
+  fi
+
+  ln -s "$source" "$target"
   echo "Linked $target -> $source"
 }
 
+if [ -e "$CODEX_DIR/skills" ] && [ ! -d "$CODEX_DIR/skills" ]; then
+  echo "Cannot install skills: $CODEX_DIR/skills is not a directory." >&2
+  exit 1
+fi
+
 mkdir -p "$CODEX_DIR/skills"
 
+link_config "$DOTFILES_DIR/codex/config.toml" "$CODEX_DIR/config.toml"
 link_config "$DOTFILES_DIR/codex/AGENTS.md" "$CODEX_DIR/AGENTS.md"
 
 for skill_dir in "$DOTFILES_DIR"/codex/skills/*; do
@@ -32,4 +52,8 @@ else
   echo "Codex CLI not found. Install it separately."
 fi
 
-echo "Done."
+if [ "$PRESERVED_PATHS" -gt 0 ]; then
+  echo "Done. Preserved $PRESERVED_PATHS existing path(s); review the merge messages above."
+else
+  echo "Done."
+fi
