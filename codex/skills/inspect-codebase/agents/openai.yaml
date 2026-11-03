@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect Codebase"
+  short_description: "Inspect a codebase through focused review passes"
+  default_prompt: "Use $inspect-codebase to inspect this codebase area for concrete issues."

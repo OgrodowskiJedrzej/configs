@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Change"
+  short_description: "Review a small change with minimal context"
+  default_prompt: "Use $review-change to inspect my current changes for concrete defects."

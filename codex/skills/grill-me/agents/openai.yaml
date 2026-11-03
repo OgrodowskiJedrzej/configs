@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grill Me"
+  short_description: "Stress-test a technical decision through dialogue"
+  default_prompt: "Use $grill-me to challenge this technical decision before I commit to it."
