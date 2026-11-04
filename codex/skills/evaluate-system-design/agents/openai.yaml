@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evaluate System Design"
+  short_description: "Compare architecture options and implementation costs"
+  default_prompt: "Use $evaluate-system-design to compare system design options for this change."
+
+policy:
+  allow_implicit_invocation: true

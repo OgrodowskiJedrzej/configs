@@ -28,6 +28,17 @@ Challenge my assumptions if the design seems wrong, but keep the discussion prac
 
 For simple tasks, solve directly. For larger changes, briefly explain the plan before editing.
 
+## Skill Routing
+When a private skill and a plugin skill both match, prefer the private skill.
+
+An explicit user invocation of `$skill-name` always takes precedence.
+
+Prefer:
+* `review-change` for focused change reviews;
+* `inspect-codebase` for broader inspections;
+* `evaluate-system-design` for architecture decisions;
+* `grill-me` for interactive decision challenges.
+
 ## Code Style
 Write the simplest code that solves the problem.
 
