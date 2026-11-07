@@ -1,0 +1,4 @@
+interface:
+  display_name: "Commit Changes"
+  short_description: "Create safe, atomic repository commits"
+  default_prompt: "Use $commit-changes to inspect and commit my authorized repository changes."

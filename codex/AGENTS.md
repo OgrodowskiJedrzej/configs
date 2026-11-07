@@ -33,7 +33,8 @@ Prefer:
 * `review-change` for focused change reviews;
 * `inspect-codebase` for broader inspections;
 * `evaluate-system-design` for architecture decisions;
-* `grill-me` for interactive decision challenges.
+* `grill-me` for interactive decision challenges;
+* `commit-changes` when the user explicitly asks to commit repository changes.
 
 ## Subagent Routing
 Keep simple, single-file tasks in the main thread.
