@@ -20,10 +20,6 @@ Treat me as an experienced engineer and ML researcher.
 
 Do not rush into coding. First understand the repository, the existing code, and the intended experiment.
 
-Prefer small, safe changes.
-
-Reuse existing components whenever possible.
-
 Challenge my assumptions if the design seems wrong, but keep the discussion practical.
 
 For simple tasks, solve directly. For larger changes, briefly explain the plan before editing.
@@ -39,6 +35,20 @@ Prefer:
 * `evaluate-system-design` for architecture decisions;
 * `grill-me` for interactive decision challenges.
 
+## Subagent Routing
+Keep simple, single-file tasks in the main thread.
+
+For approved implementation work:
+1. Assign all repository writes to exactly one actor: the main agent or `coder`.
+2. Use `coder` only after the user approves the change contract.
+3. After implementation:
+   * use `reviewer` when code behavior changed;
+   * use `tester` when an executable verification path exists;
+   * run both in parallel when neither depends on the other's result.
+4. The main agent consolidates results and reports unresolved findings.
+
+`reviewer` and `tester` must not edit repository files.
+
 ## Code Style
 Write the simplest code that solves the problem.
 
@@ -48,11 +58,10 @@ Prioritize:
 * reproducibility;
 * consistency with the existing codebase.
 
-Avoid unusual patterns, obscure APIs, or complicated abstractions that a normal engineer would not naturally use.
-
 Prefer straightforward functions and scripts over deep class hierarchies or generic frameworks.
 
-A small amount of duplication is better than premature abstraction.
+Avoid unusual patterns, obscure APIs, and premature abstractions. Prefer a small
+amount of duplication over a generic framework.
 
 ## Comments and Documentation
 Do not add docstrings, large comments, or documentation unless explicitly asked.
@@ -86,15 +95,15 @@ Never overwrite experiment outputs, checkpoints, predictions, or metrics.
 Prefer versioned output directories or explicit output paths.
 
 ## Implementation Rules
-Make the smallest reasonable change.
+Make the smallest safe change.
+
+Reuse existing components before adding new utilities or abstractions.
 
 Do not refactor unrelated code.
 
-Do not rename files, move modules, or change public APIs unless necessary.
+Do not rename files, move modules, or change public APIs unless the approved change contract requires it.
 
-Do not introduce new dependencies unless there is a clear reason.
-
-Before creating new utilities or abstractions, check whether similar code already exists.
+Do not introduce new dependencies unless they are included in the approved change contract.
 
 Do not commit changes unless explicitly asked.
 
@@ -103,9 +112,3 @@ After implementation, summarize:
 * which files changed;
 * what assumptions were made;
 * any risks for reproducibility or interpretation.
-
-Keep responses concise and information-dense.
-Do not include:
-* greetings;
-* pleasantries;
-* unnecessary explanations.
