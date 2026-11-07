@@ -16,7 +16,7 @@ Read repository instructions and inspect:
 - staged and unstaged diffs, including relevant untracked files;
 - the current and default branches;
 - repository commit or release configuration and contributing documentation;
-- 30–50 recent non-merge commit subjects.
+- the 15 most recent non-merge commit subjects.
 
 Use explicit repository rules first, enforced tooling second, and consistent
 recent history third. If no stable commit-message convention exists, use a
@@ -34,6 +34,22 @@ discard, overwrite, stash, or commit unrelated changes.
 Preserve an existing index. If staged content exactly matches one planned
 atomic commit, keep it staged and account for it in the plan. Otherwise stop and
 ask how to handle it; do not unstage, restage, or combine it automatically.
+
+## Use the fast path
+
+Use the fast path when the user explicitly requested commits, the authorized
+scope is unambiguous, the index is empty or already matches one planned commit,
+and no unrelated changes are present. Gather repository state, convention
+evidence, and diffs in one read-only batch.
+
+On the fast path, report the execution plan as a progress update and continue in
+the same turn without waiting for another confirmation. A deterministic branch
+decision that follows these instructions or an explicit user preference does not
+need separate confirmation.
+
+Leave the fast path and ask before mutating when ownership is ambiguous, staged
+content does not match the plan, the branch decision conflicts with the user's
+instruction, or the requested commit split must change materially.
 
 ## Plan atomic commits
 
@@ -69,20 +85,23 @@ Before the first branch, staging, or commit mutation, report:
 - the checks to run.
 
 Proceed only when the current user request explicitly authorizes committing and
-the plan stays within that request. Ask for confirmation when the plan introduces
-a branch the user did not request explicitly, includes ambiguous changes, or
-requires a materially different commit split than the user specified.
+the plan stays within that request. Outside the fast path, wait for confirmation
+before the first mutation.
 
 ## Execute safely
 
 Create the planned branch before staging. Stage only explicit paths or hunks;
 never use broad staging commands when unrelated changes exist. Inspect the
-staged diff and staged file list before every commit. Run the narrowest relevant
-existing checks, then commit with the detected convention.
+staged diff and staged file list before every commit. Prefer whole-path staging;
+use hunk staging only when an atomic split requires it.
 
-After each commit, verify its subject and changed paths. Stop on any failed
-check, hook, commit, or unexpected worktree change and report the exact failure.
-Do not bypass hooks without explicit authorization.
+Run shared checks once before the first commit. Rerun a check only when a later
+commit unit changes what that check covers. Stop on any failed check, hook,
+commit, or unexpected worktree change and report the exact failure. Do not bypass
+hooks without explicit authorization.
+
+After all commits, verify their hashes, subjects, changed paths, and final
+worktree state in one batch.
 
 Never push, merge, rebase, amend, tag, delete branches, or modify remote state
 unless the user explicitly requests that separate operation.
