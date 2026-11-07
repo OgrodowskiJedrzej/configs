@@ -2,6 +2,9 @@ approval_policy = "on-request"
 sandbox_mode = "read-only"
 approvals_reviewer = "user"
 
+[agents]
+max_concurrent_threads_per_session = 3
+
 developer_instructions = """
 Operate in separate proposal and execution phases.
 

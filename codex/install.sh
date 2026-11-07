@@ -36,7 +36,12 @@ if [ -e "$CODEX_DIR/skills" ] && [ ! -d "$CODEX_DIR/skills" ]; then
   exit 1
 fi
 
-mkdir -p "$CODEX_DIR/skills"
+if [ -e "$CODEX_DIR/agents" ] && [ ! -d "$CODEX_DIR/agents" ]; then
+  echo "Cannot install agents: $CODEX_DIR/agents is not a directory." >&2
+  exit 1
+fi
+
+mkdir -p "$CODEX_DIR/skills" "$CODEX_DIR/agents"
 
 link_config "$DOTFILES_DIR/codex/config.toml" "$CODEX_DIR/config.toml"
 link_config "$DOTFILES_DIR/codex/AGENTS.md" "$CODEX_DIR/AGENTS.md"
@@ -44,6 +49,11 @@ link_config "$DOTFILES_DIR/codex/AGENTS.md" "$CODEX_DIR/AGENTS.md"
 for skill_dir in "$DOTFILES_DIR"/codex/skills/*; do
   [ -d "$skill_dir" ] || continue
   link_config "$skill_dir" "$CODEX_DIR/skills/$(basename "$skill_dir")"
+done
+
+for agent_file in "$DOTFILES_DIR"/codex/agents/*.toml; do
+  [ -f "$agent_file" ] || continue
+  link_config "$agent_file" "$CODEX_DIR/agents/$(basename "$agent_file")"
 done
 
 if command -v codex >/dev/null 2>&1; then
